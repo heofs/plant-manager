@@ -1,16 +1,33 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import Layout from './components/layout';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Dashboard from './pages/dashboard';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import Plants from './pages/Plants';
+import Varieties from './pages/Varieties';
+import PageNotFound from './pages/404Page';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faHeart,
+  faLeaf,
+  faSeedling,
+  faBraille,
+  faPray,
+} from '@fortawesome/free-solid-svg-icons';
+library.add(faHeart, faLeaf, faSeedling, faBraille, faPray);
 
 function App() {
   return (
     <Router>
       <Layout>
-        <Route path="/" exact component={Dashboard} />
-        <Route path="/about/" component={Dashboard} />
-        <Route path="/users/" component={Dashboard} />
+        <Switch>
+          <Route path="/" exact component={Dashboard} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/plants" component={Plants} />
+          <Route path="/varieties" component={Varieties} />
+          <Route path="*" exact={true} component={PageNotFound} />
+        </Switch>
       </Layout>
     </Router>
   );
