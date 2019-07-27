@@ -1,25 +1,28 @@
 import React from 'react';
-import { createMemoryHistory } from 'history';
-import { withRouter } from 'react-router';
-import { Link, Route, Router, Switch } from 'react-router-dom';
+import { render } from '../../tests/utils/rtl';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faBraille } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './';
-import { render } from '@testing-library/react';
+import SidebarLink from './SidebarLink';
 
-function renderWithRouter(
-  ui,
-  {
-    route = '/',
-    history = createMemoryHistory({ initialEntries: [route] }),
-  } = {}
-) {
-  return {
-    ...render(<Router history={history}>{ui}</Router>),
-    history,
-  };
-}
+library.add(faBraille);
 
-it('renders without crashing', () => {
-  const { container } = renderWithRouter(<Sidebar />);
+describe('Sidebar', () => {
+  it('renders without crashing', () => {
+    const { container } = render(<Sidebar />);
 
-  expect(container.innerHTML).toBeTruthy();
+    expect(container.innerHTML).toBeTruthy();
+  });
+
+  describe('SidebarLink', () => {
+    it('renders without crashing', () => {
+      const { getByText } = render(
+        <SidebarLink to={'/'} icon={'braille'}>
+          My sidebar button
+        </SidebarLink>
+      );
+      const buttonText = getByText('My sidebar button');
+      expect(buttonText).toBeTruthy();
+    });
+  });
 });

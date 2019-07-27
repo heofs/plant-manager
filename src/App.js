@@ -5,7 +5,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Plants from './pages/Plants';
 import Varieties from './pages/Varieties';
-import PageNotFound from './pages/404Page';
+import PageNotFound from './pages/PageNotFound';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
