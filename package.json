@@ -11,6 +11,7 @@
     "apollo-boost": "^0.4.3",
     "bootstrap": "^4.3.1",
     "graphql": "^14.4.2",
+    "history": "^4.9.0",
     "react": "^16.8.6",
     "react-apollo": "^2.5.8",
     "react-dom": "^16.8.6",
@@ -43,5 +44,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/heofs/plant-manager"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.0.0",
+    "@testing-library/react": "^8.0.7",
+    "jest-styled-components": "^6.3.3"
   }
 }
