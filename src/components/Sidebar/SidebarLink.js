@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,6 +28,12 @@ const SidebarLink = ({ children, icon, to }) => {
       </StyledLink>
     </li>
   );
+};
+
+SidebarLink.propTypes = {
+  children: PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
 };
 
 export default SidebarLink;
