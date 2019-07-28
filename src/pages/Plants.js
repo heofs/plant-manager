@@ -7,12 +7,8 @@ class PlantsPage extends React.Component {
     this.state = { email: '', password: '' };
   }
 
-  handleEmailChange = e => {
-    this.setState({ email: e.target.value });
-  };
-
-  handlePasswordChange = e => {
-    this.setState({ password: e.target.value });
+  handleInputChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   handleSubmit = event => {
@@ -33,7 +29,7 @@ class PlantsPage extends React.Component {
               id="exampleEmail"
               placeholder="with a placeholder"
               value={this.state.email}
-              onChange={this.handleEmailChange}
+              onChange={this.handleInputChange}
             />
           </FormGroup>
           <FormGroup>
@@ -44,7 +40,7 @@ class PlantsPage extends React.Component {
               id="examplePassword"
               placeholder="password placeholder"
               value={this.state.password}
-              onChange={this.handlePasswordChange}
+              onChange={this.handleInputChange}
             />
           </FormGroup>
           <Button>Submit</Button>
