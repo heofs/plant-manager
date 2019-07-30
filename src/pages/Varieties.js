@@ -14,6 +14,13 @@ import {
   Col,
   Row,
 } from 'reactstrap';
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
+import styled from 'styled-components';
+
+const StyledReactTable = styled(ReactTable)`
+  margin-top: 1em;
+`;
 
 class VarietiesPage extends React.Component {
   constructor(props) {
@@ -58,6 +65,36 @@ class VarietiesPage extends React.Component {
   }
 
   render() {
+    const data = [
+      {
+        id: 1,
+        name: 'Tomato',
+        flowerTime: 50,
+        growTime: 40,
+        notes: 'some notes here',
+      },
+    ];
+    const columns = [
+      {
+        Header: 'Name',
+        accessor: 'name',
+        maxWidth: 500,
+        sortable: true,
+      },
+      {
+        Header: 'Flower time',
+        accessor: 'flowerTime',
+      },
+      {
+        Header: 'Grow time',
+        accessor: 'growTime',
+      },
+      {
+        Header: 'Notes',
+        accessor: 'notes',
+        sortable: false,
+      },
+    ];
     console.log(this.getLocalStorageItem(''));
     return (
       <div>
@@ -67,9 +104,9 @@ class VarietiesPage extends React.Component {
               <h1>Varieties</h1>
             </CardTitle>
             <CardSubtitle>Add your new varieties here.</CardSubtitle>
-            <Form onSubmit={this.handleSubmit}>
+            <Form className="mt-2" onSubmit={this.handleSubmit}>
               <Row>
-                <Col xs={6}>
+                <Col xs={12} md={6}>
                   <FormGroup>
                     <Label for="varietyName">Name</Label>
                     <Input
@@ -83,7 +120,7 @@ class VarietiesPage extends React.Component {
                     />
                   </FormGroup>
                 </Col>
-                <Col xs={6}>
+                <Col xs={12} md={6}>
                   <FormGroup>
                     <Label for="flowerTime">Flower time</Label>
                     <Input
@@ -122,7 +159,7 @@ class VarietiesPage extends React.Component {
             </Form>
           </CardBody>
         </Card>
-
+        <StyledReactTable data={data} columns={columns} />
         {/* <Button onClick={() => handleQuery()}>Query</Button> */}
       </div>
     );
