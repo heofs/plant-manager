@@ -32,11 +32,11 @@ class Layout extends React.Component {
     this.state = { isSidebarOpen: false };
   }
 
-  toggleSidebar() {
+  toggleSidebar = () => {
     this.setState({
       isSidebarOpen: this.state.isSidebarOpen ? false : true,
     });
-  }
+  };
   render() {
     const { children } = this.props;
     return (
@@ -44,7 +44,7 @@ class Layout extends React.Component {
         <Sidebar isOpen={this.state.isSidebarOpen} />
         <StyledMain isSidebarOpen={this.state.isSidebarOpen}>
           <Header
-            toggleSidebar={this.toggleSidebar.bind(this)}
+            toggleSidebar={this.toggleSidebar}
             isSidebarOpen={this.state.isSidebarOpen}
           />
           <Content>{children}</Content>
