@@ -61,7 +61,7 @@ const Sidebar = ({ isOpen }) => {
       <Brand>
         <NavLink to="/">
           <BrandImage src={greenhouseLogo} alt="react-logo" />
-          Brand
+          Plantager
         </NavLink>
       </Brand>
       <StyledNav>
