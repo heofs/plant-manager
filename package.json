@@ -5,8 +5,8 @@
   "version": "0.1.0",
   "author": "Henning Ofstad <henning.ofstad@gmail.com>",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.19",
-    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.20",
+    "@fortawesome/free-solid-svg-icons": "^5.10.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "apollo-boost": "^0.4.3",
     "bootstrap": "^4.3.1",
