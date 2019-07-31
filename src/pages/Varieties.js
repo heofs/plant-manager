@@ -26,6 +26,8 @@ class VarietiesPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
+      tableData: null,
       varietyName: this.getLocalStorageItem('varietyName'),
       flowerTime: this.getLocalStorageItem('flowerTime'),
       growTime: this.getLocalStorageItem('growTime'),
@@ -36,6 +38,25 @@ class VarietiesPage extends React.Component {
     return localStorage.getItem('varietyForm-' + item) || '';
   }
   getTableData = () => {
+    this.props.client
+      .query({
+        query: gql`
+          {
+            allVarieties {
+              id
+              variety
+            }
+          }
+        `,
+      })
+      .then(result => {
+        this.setState({
+          isLoading: false,
+        });
+      });
+  };
+
+  insertVariety = () => {
     this.props.client
       .query({
         query: gql`
@@ -61,7 +82,7 @@ class VarietiesPage extends React.Component {
   };
 
   componentDidMount() {
-    // getTableData();
+    this.getTableData();
   }
 
   render() {
@@ -95,7 +116,6 @@ class VarietiesPage extends React.Component {
         sortable: false,
       },
     ];
-    console.log(this.getLocalStorageItem(''));
     return (
       <div>
         <Card>
@@ -159,7 +179,12 @@ class VarietiesPage extends React.Component {
             </Form>
           </CardBody>
         </Card>
-        <StyledReactTable data={data} columns={columns} />
+        <StyledReactTable
+          data={data}
+          columns={columns}
+          defaultPageSize={10}
+          loading={this.state.isLoading}
+        />
         {/* <Button onClick={() => handleQuery()}>Query</Button> */}
       </div>
     );
