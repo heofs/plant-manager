@@ -1,6 +1,6 @@
 import React from 'react';
-import { withApollo } from 'react-apollo';
-import { gql } from 'apollo-boost';
+import { withApollo, Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
 import {
   Button,
   Form,
@@ -44,31 +44,20 @@ class VarietiesPage extends React.Component {
           {
             allVarieties {
               id
+              grow_time
+              flower_time
               variety
+              notes
             }
           }
         `,
       })
       .then(result => {
+        console.log(result.data.allVarieties);
         this.setState({
           isLoading: false,
         });
       });
-  };
-
-  insertVariety = () => {
-    this.props.client
-      .query({
-        query: gql`
-          {
-            allVarieties {
-              id
-              variety
-            }
-          }
-        `,
-      })
-      .then(result => console.log(result));
   };
 
   handleInputChange = e => {
@@ -116,6 +105,29 @@ class VarietiesPage extends React.Component {
         sortable: false,
       },
     ];
+    const CREATE_VARIETY = gql`
+      mutation CreateVariety(
+        $variety: String!
+        $flower_time: Int
+        $grow_time: Int
+        $notes: String
+      ) {
+        createVariety(
+          input: {
+            variety: $variety
+            flower_time: $flower_time
+            grow_time: $grow_time
+            notes: $notes
+          }
+        ) {
+          id
+          grow_time
+          flower_time
+          variety
+          notes
+        }
+      }
+    `;
     return (
       <div>
         <Card>
@@ -124,59 +136,76 @@ class VarietiesPage extends React.Component {
               <h1>Varieties</h1>
             </CardTitle>
             <CardSubtitle>Add your new varieties here.</CardSubtitle>
-            <Form className="mt-2" onSubmit={this.handleSubmit}>
-              <Row>
-                <Col xs={12} md={6}>
+            <Mutation mutation={CREATE_VARIETY}>
+              {(createVariety, { data }) => (
+                <Form
+                  className="mt-2"
+                  onSubmit={e => {
+                    e.preventDefault();
+                    createVariety({
+                      variables: {
+                        variety: this.state.varietyName,
+                        flower_time: parseInt(this.state.flowerTime),
+                        grow_time: parseInt(this.state.growTime),
+                        notes: this.state.varietyNotes,
+                      },
+                    });
+                  }}
+                >
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <FormGroup>
+                        <Label for="varietyName">Name</Label>
+                        <Input
+                          type="text"
+                          name="varietyName"
+                          id="varietyName"
+                          placeholder="Name of your variety"
+                          value={this.state.varietyName}
+                          onChange={this.handleInputChange}
+                          data-message-required="This field is required."
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <FormGroup>
+                        <Label for="flowerTime">Flower time</Label>
+                        <Input
+                          type="number"
+                          name="flowerTime"
+                          id="flowerTime"
+                          placeholder="Days of flowering"
+                          value={this.state.flowerTime}
+                          onChange={this.handleInputChange}
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <Label for="growTime">Grow time</Label>
+                        <Input
+                          type="number"
+                          name="growTime"
+                          id="growTime"
+                          placeholder="Days of growing"
+                          value={this.state.growTime}
+                          onChange={this.handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                   <FormGroup>
-                    <Label for="varietyName">Name</Label>
+                    <Label for="varietyNotes">Notes</Label>
                     <Input
-                      type="text"
-                      name="varietyName"
-                      id="varietyName"
-                      placeholder="Name of your variety"
-                      value={this.state.varietyName}
+                      type="textarea"
+                      name="varietyNotes"
+                      id="varietyNotes"
+                      value={this.state.varietyNotes}
                       onChange={this.handleInputChange}
-                      data-message-required="This field is required."
                     />
                   </FormGroup>
-                </Col>
-                <Col xs={12} md={6}>
-                  <FormGroup>
-                    <Label for="flowerTime">Flower time</Label>
-                    <Input
-                      type="number"
-                      name="flowerTime"
-                      id="flowerTime"
-                      placeholder="Days of flowering"
-                      value={this.state.flowerTime}
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="growTime">Grow time</Label>
-                    <Input
-                      type="number"
-                      name="growTime"
-                      id="growTime"
-                      placeholder="Days of growing"
-                      value={this.state.growTime}
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <FormGroup>
-                <Label for="varietyNotes">Notes</Label>
-                <Input
-                  type="textarea"
-                  name="varietyNotes"
-                  id="varietyNotes"
-                  value={this.state.varietyNotes}
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-              <Button>Submit</Button>
-            </Form>
+                  <Button>Submit</Button>
+                </Form>
+              )}
+            </Mutation>
           </CardBody>
         </Card>
         <StyledReactTable
