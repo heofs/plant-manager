@@ -7,6 +7,7 @@ import Sidebar from './Sidebar';
 
 import { breakpoints, sizes } from '../constants/theme';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-table/react-table.css';
 
 const StyledMain = styled.div`
   transition: margin-left 0.5s;

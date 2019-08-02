@@ -1,4 +1,6 @@
 import React from 'react';
+import { withApollo } from 'react-apollo';
+
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 class PlantsPage extends React.Component {
@@ -17,9 +19,13 @@ class PlantsPage extends React.Component {
     event.preventDefault();
   };
 
+  // componentDidMount() {
+  // }
+
   render() {
     return (
       <div>
+        {/* {console.log(this.props.client)} */}
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
             <Label for="exampleEmail">Email</Label>
@@ -50,4 +56,4 @@ class PlantsPage extends React.Component {
   }
 }
 
-export default PlantsPage;
+export default withApollo(PlantsPage);
