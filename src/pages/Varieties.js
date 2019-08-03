@@ -32,6 +32,18 @@ class VarietiesPage extends React.Component {
   getLocalStorageItem(item) {
     return localStorage.getItem('varietyForm-' + item) || '';
   }
+  clearForm() {
+    localStorage.removeItem('varietyForm-varietyName');
+    localStorage.removeItem('flowerTime-varietyName');
+    localStorage.removeItem('growTime-varietyName');
+    localStorage.removeItem('varietyNotes-varietyName');
+    this.setState({
+      varietyName: '',
+      flowerTime: '',
+      growTime: '',
+      varietyNotes: '',
+    });
+  }
 
   handleInputChange = e => {
     localStorage.setItem('varietyForm-' + e.target.name, e.target.value);
@@ -82,6 +94,7 @@ class VarietiesPage extends React.Component {
             pauseOnHover: false,
           })
         );
+        this.clearForm();
       })
       .catch(e => {
         if (
@@ -128,6 +141,7 @@ class VarietiesPage extends React.Component {
                       value={this.state.varietyName}
                       onChange={this.handleInputChange}
                       data-message-required="This field is required."
+                      required
                     />
                   </FormGroup>
                 </Col>

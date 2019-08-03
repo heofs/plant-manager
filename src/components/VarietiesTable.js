@@ -37,7 +37,7 @@ const VarietiesTable = ({ data, isLoading, handleDeleteVariety }) => {
         </div>
       ),
       accessor: 'variety',
-      maxWidth: 500,
+      minWidth: 160,
       sortable: true,
     },
     {
