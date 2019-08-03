@@ -8,6 +8,7 @@ import Sidebar from './Sidebar';
 import { breakpoints, sizes } from '../constants/theme';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-table/react-table.css';
+import 'sweetalert2/src/sweetalert2.scss';
 
 const StyledMain = styled.div`
   transition: margin-left 0.5s;

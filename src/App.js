@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
+import { ToastProvider } from 'react-toast-notifications';
 import ApolloClient from 'apollo-boost';
 
 import Layout from './components/Layout';
@@ -19,8 +20,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 library.add(faHeart, faLeaf, faSeedling, faBraille, faPray);
 
-const apolloClient = new ApolloClient({
-  uri: 'http://localhost:4000/',
+export const apolloClient = new ApolloClient({
+  uri: 'http://192.168.1.31:4000/',
   headers: {
     authorization: 'testTokenCeyJhbGciOiJSU',
   },
@@ -28,19 +29,25 @@ const apolloClient = new ApolloClient({
 
 function App() {
   return (
-    <ApolloProvider client={apolloClient}>
-      <Router>
-        <Layout>
-          <Switch>
-            <Route path="/" exact component={Varieties} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/plants" component={Plants} />
-            <Route path="/varieties" component={Varieties} />
-            <Route path="*" exact={true} component={PageNotFound} />
-          </Switch>
-        </Layout>
-      </Router>
-    </ApolloProvider>
+    <ToastProvider
+      autoDismissTimeout={4000}
+      // components={{ Toast: MyCustomToast }}
+      placement="bottom-right"
+    >
+      <ApolloProvider client={apolloClient}>
+        <Router>
+          <Layout>
+            <Switch>
+              <Route path="/" exact component={Varieties} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/plants" component={Plants} />
+              <Route path="/varieties" component={Varieties} />
+              <Route path="*" exact={true} component={PageNotFound} />
+            </Switch>
+          </Layout>
+        </Router>
+      </ApolloProvider>
+    </ToastProvider>
   );
 }
 

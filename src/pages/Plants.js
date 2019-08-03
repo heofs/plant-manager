@@ -1,5 +1,7 @@
 import React from 'react';
 import { withApollo } from 'react-apollo';
+import { withToastManager } from 'react-toast-notifications';
+import { flow } from 'lodash';
 
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
@@ -56,4 +58,7 @@ class PlantsPage extends React.Component {
   }
 }
 
-export default withApollo(PlantsPage);
+export default flow(
+  withApollo,
+  withToastManager
+)(PlantsPage);
