@@ -1,7 +1,8 @@
 import gql from 'graphql-tag';
+import { apolloClient } from '../App';
 
-export const createVariety = (client, variables) => {
-  return client.mutate({
+export const createVariety = variables => {
+  return apolloClient.mutate({
     mutation: gql`
       mutation CreateVariety(
         $variety: String!
@@ -29,8 +30,8 @@ export const createVariety = (client, variables) => {
   });
 };
 
-export const getVarieties = client => {
-  return client.query({
+export const getVarieties = () => {
+  return apolloClient.query({
     query: gql`
       {
         allVarieties {
@@ -42,5 +43,19 @@ export const getVarieties = client => {
         }
       }
     `,
+  });
+};
+
+export const deleteVariety = variables => {
+  return apolloClient.mutate({
+    mutation: gql`
+      mutation DeleteVariety($id: ID!) {
+        deleteVariety(input: { id: $id }) {
+          id
+          variety
+        }
+      }
+    `,
+    variables: variables,
   });
 };

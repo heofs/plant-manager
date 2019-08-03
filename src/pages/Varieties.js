@@ -1,6 +1,6 @@
 import React from 'react';
-import { withApollo } from 'react-apollo';
-import { createVariety, getVarieties } from '../graphql/variety';
+import { withToastManager } from 'react-toast-notifications';
+import { createVariety, getVarieties, deleteVariety } from '../graphql/variety';
 import {
   Button,
   Form,
@@ -39,10 +39,25 @@ class VarietiesPage extends React.Component {
   };
 
   getTableData = () => {
-    getVarieties(this.props.client).then(result => {
+    getVarieties().then(result => {
       this.setState({
         isLoading: false,
         tableData: result.data.allVarieties,
+      });
+    });
+  };
+
+  handleDeleteVariety = (id, varietyName) => {
+    console.log('Deleting ', id);
+    deleteVariety({ id }).then(() => {
+      const newTableData = this.state.tableData.filter(row => row.id !== id);
+      this.setState({
+        tableData: newTableData,
+      });
+      this.props.toastManager.add('Deleted variety ' + varietyName + '.', {
+        appearance: 'success',
+        autoDismiss: true,
+        pauseOnHover: false,
       });
     });
   };
@@ -55,11 +70,36 @@ class VarietiesPage extends React.Component {
       grow_time: parseInt(this.state.growTime),
       notes: this.state.varietyNotes,
     };
-    createVariety(this.props.client, variables).then(data => {
-      this.setState({
-        tableData: [data.data.createVariety, ...this.state.tableData],
+    createVariety(variables)
+      .then(data => {
+        this.setState(
+          {
+            tableData: [data.data.createVariety, ...this.state.tableData],
+          },
+          this.props.toastManager.add('Created new variety.', {
+            appearance: 'success',
+            autoDismiss: true,
+            pauseOnHover: false,
+          })
+        );
+      })
+      .catch(e => {
+        if (
+          e.message.includes('duplicate key value violates unique constraint')
+        ) {
+          this.props.toastManager.add('This variety name already exist.', {
+            appearance: 'error',
+            autoDismiss: true,
+            pauseOnHover: false,
+          });
+        } else {
+          this.props.toastManager.add(e.message, {
+            appearance: 'error',
+            autoDismiss: true,
+            pauseOnHover: true,
+          });
+        }
       });
-    });
   };
 
   componentDidMount() {
@@ -133,6 +173,7 @@ class VarietiesPage extends React.Component {
         <VarietiesTable
           data={this.state.tableData}
           isLoading={this.state.isLoading}
+          handleDeleteVariety={this.handleDeleteVariety}
         />
         {/* <Button onClick={() => handleQuery()}>Query</Button> */}
       </div>
@@ -140,4 +181,4 @@ class VarietiesPage extends React.Component {
   }
 }
 
-export default withApollo(VarietiesPage);
+export default withToastManager(VarietiesPage);
