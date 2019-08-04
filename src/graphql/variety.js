@@ -59,3 +59,34 @@ export const deleteVariety = variables => {
     variables: variables,
   });
 };
+
+export const updateVariety = variables => {
+  return apolloClient.mutate({
+    mutation: gql`
+      mutation UpdateVariety(
+        $id: ID!
+        $variety: String
+        $flower_time: Int
+        $grow_time: Int
+        $notes: String
+      ) {
+        updateVariety(
+          input: {
+            id: $id
+            variety: $variety
+            flower_time: $flower_time
+            grow_time: $grow_time
+            notes: $notes
+          }
+        ) {
+          id
+          grow_time
+          flower_time
+          variety
+          notes
+        }
+      }
+    `,
+    variables: variables,
+  });
+};

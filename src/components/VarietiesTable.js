@@ -24,7 +24,12 @@ const TableButton = styled.button`
 const StyledReactTable = styled(ReactTable)`
   margin-top: 1em;
 `;
-const VarietiesTable = ({ data, isLoading, handleDeleteVariety }) => {
+const VarietiesTable = ({
+  data,
+  isLoading,
+  handleDeleteVariety,
+  handleOpenEdit,
+}) => {
   const columns = [
     {
       Header: () => (
@@ -93,7 +98,7 @@ const VarietiesTable = ({ data, isLoading, handleDeleteVariety }) => {
             width={'65%'}
             color={'#007bff'}
             onClick={e => {
-              console.log(value);
+              handleOpenEdit(value);
             }}
           >
             Edit
@@ -138,6 +143,8 @@ const VarietiesTable = ({ data, isLoading, handleDeleteVariety }) => {
 VarietiesTable.propTypes = {
   data: PropTypes.array.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  handleDeleteVariety: PropTypes.func.isRequired,
+  handleOpenEdit: PropTypes.func.isRequired,
 };
 
 export default VarietiesTable;
