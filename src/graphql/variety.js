@@ -43,6 +43,7 @@ export const getVarieties = () => {
         }
       }
     `,
+    fetchPolicy: 'network-only',
   });
 };
 

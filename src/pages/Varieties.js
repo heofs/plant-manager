@@ -64,17 +64,25 @@ class VarietiesPage extends React.Component {
   };
 
   handleDeleteVariety = (id, varietyName) => {
-    deleteVariety({ id }).then(() => {
-      const newTableData = this.state.tableData.filter(row => row.id !== id);
-      this.setState({
-        tableData: newTableData,
+    deleteVariety({ id })
+      .then(() => {
+        const newTableData = this.state.tableData.filter(row => row.id !== id);
+        this.setState({
+          tableData: newTableData,
+        });
+        this.props.toastManager.add('Deleted variety ' + varietyName + '.', {
+          appearance: 'success',
+          autoDismiss: true,
+          pauseOnHover: false,
+        });
+      })
+      .catch(e => {
+        this.props.toastManager.add(e.message, {
+          appearance: 'error',
+          autoDismiss: true,
+          pauseOnHover: false,
+        });
       });
-      this.props.toastManager.add('Deleted variety ' + varietyName + '.', {
-        appearance: 'success',
-        autoDismiss: true,
-        pauseOnHover: false,
-      });
-    });
   };
 
   handleOpenEdit = rowId => {
