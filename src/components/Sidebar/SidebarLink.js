@@ -22,7 +22,7 @@ const StyledLink = styled(NavLink)`
 const SidebarLink = ({ children, icon, to }) => {
   return (
     <li>
-      <StyledLink to={to} activeClassName="ml-5 text-primary">
+      <StyledLink to={to} activeClassName="ml-5">
         <FontAwesomeIcon className="mr-3" icon={icon} />
         {children}
       </StyledLink>

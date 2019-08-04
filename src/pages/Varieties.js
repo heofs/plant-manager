@@ -9,19 +9,15 @@ import {
 import {
   Button,
   Form,
-  FormGroup,
-  Label,
-  Input,
   Card,
   CardBody,
   CardTitle,
   CardSubtitle,
-  Col,
-  Row,
 } from 'reactstrap';
 
 import VarietiesTable from '../components/VarietiesTable';
-import VarietyEditForm from '../components/VarietyEditForm';
+import EditForm from '../components/VarietyForm/EditForm';
+import BaseForm from '../components/VarietyForm/BaseForm';
 
 class VarietiesPage extends React.Component {
   constructor(props) {
@@ -42,9 +38,9 @@ class VarietiesPage extends React.Component {
   }
   clearForm() {
     localStorage.removeItem('varietyForm-varietyName');
-    localStorage.removeItem('flowerTime-varietyName');
-    localStorage.removeItem('growTime-varietyName');
-    localStorage.removeItem('varietyNotes-varietyName');
+    localStorage.removeItem('varietyForm-flowerTime');
+    localStorage.removeItem('varietyForm-growTime');
+    localStorage.removeItem('varietyForm-varietyNotes');
     this.setState({
       varietyName: '',
       flowerTime: '',
@@ -68,7 +64,6 @@ class VarietiesPage extends React.Component {
   };
 
   handleDeleteVariety = (id, varietyName) => {
-    console.log('Deleting ', id);
     deleteVariety({ id }).then(() => {
       const newTableData = this.state.tableData.filter(row => row.id !== id);
       this.setState({
@@ -173,7 +168,7 @@ class VarietiesPage extends React.Component {
     return (
       <div>
         {this.state.isEditing ? (
-          <VarietyEditForm
+          <EditForm
             targetData={this.state.editData}
             handleSaveEdit={this.handleSaveEdit}
             handleCancelEdit={this.handleCancelEdit}
@@ -186,57 +181,13 @@ class VarietiesPage extends React.Component {
               </CardTitle>
               <CardSubtitle>Add your new varieties here.</CardSubtitle>
               <Form className="mt-2" onSubmit={this.handleSubmitForm}>
-                <Row>
-                  <Col xs={12} md={6}>
-                    <FormGroup>
-                      <Label for="varietyName">Name</Label>
-                      <Input
-                        type="text"
-                        name="varietyName"
-                        id="varietyName"
-                        placeholder="Name of your variety"
-                        value={this.state.varietyName}
-                        onChange={this.handleInputChange}
-                        data-message-required="This field is required."
-                        required
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <FormGroup>
-                      <Label for="flowerTime">Flower time</Label>
-                      <Input
-                        type="number"
-                        name="flowerTime"
-                        id="flowerTime"
-                        placeholder="Days of flowering"
-                        value={this.state.flowerTime}
-                        onChange={this.handleInputChange}
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="growTime">Grow time</Label>
-                      <Input
-                        type="number"
-                        name="growTime"
-                        id="growTime"
-                        placeholder="Days of growing"
-                        value={this.state.growTime}
-                        onChange={this.handleInputChange}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <FormGroup>
-                  <Label for="varietyNotes">Notes</Label>
-                  <Input
-                    type="textarea"
-                    name="varietyNotes"
-                    id="varietyNotes"
-                    value={this.state.varietyNotes}
-                    onChange={this.handleInputChange}
-                  />
-                </FormGroup>
+                <BaseForm
+                  handleInputChange={this.handleInputChange}
+                  varietyName={this.state.varietyName}
+                  flowerTime={this.state.flowerTime}
+                  growTime={this.state.growTime}
+                  varietyNotes={this.state.varietyNotes}
+                />
                 <Button color="primary" className="w-100">
                   Submit
                 </Button>

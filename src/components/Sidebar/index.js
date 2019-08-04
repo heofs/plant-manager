@@ -68,10 +68,10 @@ const Sidebar = ({ isOpen }) => {
         <SidebarLink to={'/dashboard'} icon={'braille'}>
           Dashboard
         </SidebarLink>
-        <SidebarLink to={'/plants'} icon={'braille'}>
+        <SidebarLink to={'/plants'} icon={'seedling'}>
           Plants
         </SidebarLink>
-        <SidebarLink to={'/varieties'} icon={'braille'}>
+        <SidebarLink to={'/varieties'} icon={'dna'}>
           Varieties
         </SidebarLink>
       </StyledNav>

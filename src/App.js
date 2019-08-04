@@ -17,8 +17,9 @@ import {
   faSeedling,
   faBraille,
   faPray,
+  faDna,
 } from '@fortawesome/free-solid-svg-icons';
-library.add(faHeart, faLeaf, faSeedling, faBraille, faPray);
+library.add(faHeart, faLeaf, faSeedling, faBraille, faPray, faDna);
 
 export const apolloClient = new ApolloClient({
   uri: 'http://192.168.1.31:4000/',
