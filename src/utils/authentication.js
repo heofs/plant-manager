@@ -1,31 +1,54 @@
 import React, { createContext, useState, useEffect } from 'react';
-import * as firebase from 'firebase/app';
+
+import firebase from './firebase';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setAuthenticated] = useState(true);
-  const [currentUser, setCurrentUser] = useState({});
-  const login = () => {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // User is signed in.
-      } else {
-        // No user is signed in.
-      }
+  const [currentUser, setCurrentUser] = useState(null);
+  const login = (email, password) => {
+    firebase.login(email, password).then(res => {
+      const user = res.user;
+      setCurrentUser({
+        uid: user.uid,
+        displayName: user.displayName,
+        token: user.ra,
+        refreshToken: user.refreshToken,
+      });
     });
-    setAuthenticated(true);
+  };
+  const rememberLogin = (email, password) => {
+    firebase
+      .rememberLogin()
+      .then(() => {
+        console.log('Signing in');
+        //   return firebase.auth().signInWithEmailAndPassword(email, password);
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
   };
   const logout = () => {
-    console.log(isAuthenticated);
-    setAuthenticated(false);
+    console.log(currentUser);
   };
+  useEffect(() => {
+    firebase.onAuthStateChanged(user => {
+      if (user) {
+        console.log(user);
+        setCurrentUser(user);
+      } else {
+        console.log('No user');
+        setCurrentUser(null);
+      }
+    });
+  });
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated,
+        currentUser,
         login,
         logout,
+        rememberLogin,
       }}
     >
       {children}
@@ -33,19 +56,27 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-const withAuthentication = () => Component => {
+export const withAuthentication = Component => () => {
   return (
     <AuthContext.Consumer>
-      {({ currentUser, isAuthenticated, login, logout }) => (
+      {({ currentUser, login, logout, rememberLogin }) => (
         <Component
           currentUser={currentUser}
-          isAuthenticated={isAuthenticated}
           login={login}
           logout={logout}
+          rememberLogin={rememberLogin}
         />
       )}
     </AuthContext.Consumer>
   );
 };
 
-export default withAuthentication;
+export const withCurrentUser = Component => () => {
+  return (
+    <AuthContext.Consumer>
+      {({ currentUser, logout }) => (
+        <Component currentUser={currentUser} logout={logout} />
+      )}
+    </AuthContext.Consumer>
+  );
+};

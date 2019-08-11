@@ -74,6 +74,9 @@ const Sidebar = ({ isOpen }) => {
         <SidebarLink to={'/varieties'} icon={'dna'}>
           Varieties
         </SidebarLink>
+        <SidebarLink to={'/login'} icon={'dna'}>
+          Login
+        </SidebarLink>
       </StyledNav>
     </StyledSidebar>
   );
