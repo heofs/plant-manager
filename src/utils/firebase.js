@@ -1,7 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 
-// app.provider();
+const provider = new app.auth.GoogleAuthProvider();
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDP0JIFjXrx0TNUtsF2Q0XEPCxOGdiWfcc',
@@ -32,7 +32,15 @@ class Firebase {
     return this.auth.onAuthStateChanged;
   }
   rememberLogin() {
-    return () => this.auth.setPersistence(this.auth.Auth.Persistence.LOCAL);
+    return this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL);
+  }
+  googleLogin() {
+    return () => this.auth.signInWithPopup(provider);
+  }
+  isInitialized() {
+    return new Promise(resolve => {
+      this.auth.onAuthStateChanged(resolve);
+    });
   }
 }
 
