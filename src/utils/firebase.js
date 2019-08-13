@@ -35,7 +35,7 @@ class Firebase {
     return this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL);
   }
   googleLogin() {
-    return () => this.auth.signInWithPopup(provider);
+    return this.auth.signInWithPopup(provider);
   }
   isInitialized() {
     return new Promise(resolve => {
