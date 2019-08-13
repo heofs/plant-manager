@@ -3,15 +3,14 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import { ToastProvider } from 'react-toast-notifications';
 import { withAuthentication } from './utils/authentication';
-
-import ApolloClient from 'apollo-boost';
+import { apolloClient } from './utils/apollo';
 
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Plants from './pages/Plants';
 import Varieties from './pages/Varieties';
 import PageNotFound from './pages/PageNotFound';
-import LoginPage from './components/Authentication/LoginPage';
+import LoginPage from './pages/Login';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -24,13 +23,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 library.add(faHeart, faLeaf, faSeedling, faBraille, faPray, faDna);
 
-export const apolloClient = new ApolloClient({
-  uri: 'http://localhost:4000/',
-  headers: {
-    authorization: 'testTokenCeyJhbGciOiJSU',
-  },
-});
-
 function App({ currentUser }) {
   return (
     <ToastProvider
@@ -38,8 +30,8 @@ function App({ currentUser }) {
       // components={{ Toast: MyCustomToast }}
       placement="bottom-right"
     >
-      <ApolloProvider client={apolloClient}>
-        {currentUser ? (
+      {currentUser ? (
+        <ApolloProvider client={apolloClient}>
           <Router>
             <Layout>
               <Switch>
@@ -52,10 +44,10 @@ function App({ currentUser }) {
               </Switch>
             </Layout>
           </Router>
-        ) : (
-          <LoginPage />
-        )}
-      </ApolloProvider>
+        </ApolloProvider>
+      ) : (
+        <LoginPage />
+      )}
     </ToastProvider>
   );
 }
