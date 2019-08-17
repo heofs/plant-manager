@@ -24,10 +24,10 @@ class Firebase {
   logout() {
     return this.auth.signOut();
   }
-  register(email, password) {
-    return this.auth.createUserWithEmailAndPassword(email, password);
-    //   return this.auth.currentUser.updateProfile({displayName: name})
-  }
+  register = async (name, email, password) => {
+    await this.auth.createUserWithEmailAndPassword(email, password);
+    return this.auth.currentUser.updateProfile({ displayName: name });
+  };
   onAuthStateChanged() {
     return this.auth.onAuthStateChanged;
   }

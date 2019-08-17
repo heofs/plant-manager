@@ -61,9 +61,11 @@ export const AuthProvider = ({ children }) => {
         console.log(error.message);
       });
   };
-
   const getUser = () => {
     return firebase.isInitialized();
+  };
+  const register = (name, email, password) => {
+    return firebase.register(name, email, password);
   };
   useEffect(() => {
     firebase.isInitialized().then(user => {
@@ -84,6 +86,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         rememberLogin,
         googleLogin,
+        register,
       }}
     >
       {children}
@@ -101,6 +104,7 @@ export const withAuthentication = Component => () => {
         logout,
         rememberLogin,
         googleLogin,
+        register,
       }) => (
         <Component
           currentUser={currentUser}
@@ -109,6 +113,7 @@ export const withAuthentication = Component => () => {
           rememberLogin={rememberLogin}
           googleLogin={googleLogin}
           getUser={getUser}
+          register={register}
         />
       )}
     </AuthContext.Consumer>
