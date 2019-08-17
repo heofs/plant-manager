@@ -8,12 +8,18 @@ import ForgotForm from './ForgotForm';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  position: relative;
-  /* display: inline-block; */
+  background-color: #f5f5f5;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledCard = styled.div`
+  overflow: hidden;
   margin: 0;
   width: 300px;
   padding: 1em;
-  top: calc(100vh / 2 - 146px);
 `;
 
 const LoginPage = ({
@@ -22,10 +28,11 @@ const LoginPage = ({
   rememberLogin,
   googleLogin,
   getUser,
+  register,
 }) => {
   const [isLoading, setLoading] = useState(true);
   const [inputs, setInputs] = useState({
-    displayName: 'Mike',
+    displayName: '',
     email: '',
     password: '',
   });
@@ -60,6 +67,7 @@ const LoginPage = ({
           inputs={inputs}
           setSelection={setSelection}
           handleInputChange={handleInputChange}
+          register={register}
         />
       );
     }
@@ -84,9 +92,11 @@ const LoginPage = ({
     );
   };
   return (
-    <Wrapper className="card text-center mx-auto">
-      <h1 className="h3 mb-3 font-weight-normal">Plantager</h1>
-      {renderSelection()}
+    <Wrapper>
+      <StyledCard className="card text-center mx-auto">
+        <h1 className="h3 mb-3 font-weight-normal">Plantager</h1>
+        {renderSelection()}
+      </StyledCard>
     </Wrapper>
   );
 };

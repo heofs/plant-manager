@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Form, FormGroup, Label, Input } from 'reactstrap';
+import Button from './Button';
+import GoogleLogo from '../../images/google-logo.svg';
 
 const LoginForm = ({
   inputs,
@@ -59,8 +61,7 @@ const LoginForm = ({
         </Label>
       </FormGroup>
       <Button
-        className="btn-block"
-        color="primary"
+        color="success"
         type="submit"
         onClick={async e => {
           e.preventDefault();
@@ -87,18 +88,17 @@ const LoginForm = ({
         Sign in
       </Button>
       <Button
-        className="btn-block"
-        color="primary"
+        color="success"
         onClick={e => {
           e.preventDefault();
           loginGoogle();
         }}
+        image={GoogleLogo}
       >
         Sign in with Google
       </Button>
       <Button
-        className="btn-block"
-        color="secondary"
+        color="info"
         onClick={e => {
           e.preventDefault();
           setSelection('register');
