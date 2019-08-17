@@ -5,12 +5,9 @@ import firebase from './firebase';
 const httpLink = new HttpLink({ uri: 'http://localhost:4000/' });
 
 const authLink = setContext(async (_, { headers }) => {
-  let token = null;
-  await firebase.isInitialized().then(user => {
-    token = user.ra;
-  });
-  // return the headers to the context so httpLink can read them
+  let token = await firebase.isInitialized().then(user => user.ra);
 
+  // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
