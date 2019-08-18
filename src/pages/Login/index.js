@@ -102,14 +102,3 @@ const LoginPage = ({
 };
 
 export default withAuthentication(LoginPage);
-
-// <div>
-//   <h1>Not signed in</h1>
-//   <button onClick={() => login('henning@mail.com', 'Password123')}>
-//     Sign in
-//   </button>
-//   <button onClick={() => rememberLogin('henning@mail.com', 'Password123')}>
-//     Remember login
-//   </button>
-//   <button onClick={() => googleLogin()}>Google login</button>
-// </div>

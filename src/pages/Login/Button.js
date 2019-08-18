@@ -18,7 +18,7 @@ const Button = ({ children, color, onClick, image }) => {
   return (
     <StyledButton
       className="btn-block shadow-sm"
-      color={color}
+      color={color || 'success'}
       onClick={onClick}
     >
       {image && <StyledImage src={image} alt={image} />}
