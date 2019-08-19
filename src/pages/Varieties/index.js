@@ -5,7 +5,7 @@ import {
   getVarieties,
   deleteVariety,
   updateVariety,
-} from '../graphql/variety';
+} from '../../graphql/variety';
 import {
   Button,
   Form,
@@ -15,9 +15,9 @@ import {
   CardSubtitle,
 } from 'reactstrap';
 
-import VarietiesTable from '../components/VarietiesTable';
-import EditForm from '../components/VarietyForm/EditForm';
-import BaseForm from '../components/VarietyForm/BaseForm';
+import VarietiesTable from '../../components/VarietiesTable';
+import EditForm from './Form/EditForm';
+import BaseForm from './Form/BaseForm';
 
 class VarietiesPage extends React.Component {
   constructor(props) {
