@@ -26,7 +26,7 @@ const StyledReactTable = styled(ReactTable)`
 `;
 const VarietiesTable = ({
   data,
-  isLoading,
+  loading,
   handleDeleteVariety,
   handleOpenEdit,
 }) => {
@@ -135,14 +135,14 @@ const VarietiesTable = ({
       data={data}
       columns={columns}
       defaultPageSize={10}
-      loading={isLoading}
+      loading={loading}
     />
   );
 };
 
 VarietiesTable.propTypes = {
   data: PropTypes.array.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   handleDeleteVariety: PropTypes.func.isRequired,
   handleOpenEdit: PropTypes.func.isRequired,
 };

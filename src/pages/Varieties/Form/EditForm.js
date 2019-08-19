@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Card, CardBody, CardTitle, Col, Row } from 'reactstrap';
 
@@ -6,10 +6,10 @@ import BaseForm from './BaseForm';
 
 const VarietyEditForm = ({ targetData, handleCancelEdit, handleSaveEdit }) => {
   const [inputs, setInputs] = useState({
-    varietyName: '',
-    flowerTime: '',
-    growTime: '',
-    varietyNotes: '',
+    varietyName: targetData.variety || '',
+    flowerTime: targetData.flower_time || '',
+    growTime: targetData.grow_time || '',
+    varietyNotes: targetData.notes || '',
   });
   const handleInputChange = event => {
     event.persist();
@@ -18,31 +18,17 @@ const VarietyEditForm = ({ targetData, handleCancelEdit, handleSaveEdit }) => {
       [event.target.name]: event.target.value,
     }));
   };
-  useEffect(
-    () =>
-      setInputs(() => ({
-        varietyName: targetData.variety || '',
-        flowerTime: targetData.flower_time || '',
-        growTime: targetData.grow_time || '',
-        varietyNotes: targetData.notes || '',
-      })),
-    [
-      targetData.variety,
-      targetData.flower_time,
-      targetData.grow_time,
-      targetData.notes,
-    ]
-  );
   return (
     <Card>
       <CardBody>
         <CardTitle>
           <h1>Editing: {targetData.variety}</h1>
         </CardTitle>
-        {/* <CardSubtitle>Add your new varieties here.</CardSubtitle> */}
         <Form
           className="mt-2"
-          onSubmit={e => handleSaveEdit(e, { id: targetData.id, ...inputs })}
+          onSubmit={e => {
+            handleSaveEdit(e, { id: targetData.id, ...inputs });
+          }}
         >
           <BaseForm
             handleInputChange={handleInputChange}

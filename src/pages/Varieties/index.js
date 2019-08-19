@@ -3,10 +3,10 @@ import { withToastManager } from 'react-toast-notifications';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import useLocalStorage from '../../enhancers/useLocalStorage';
+import { toInteger } from 'lodash';
 
 import {
   createVariety,
-  getVarieties,
   deleteVariety,
   updateVariety,
 } from '../../graphql/variety';
@@ -36,10 +36,9 @@ const GET_VARIETIES = gql`
 `;
 
 const VarietiesPage = ({ toastManager }) => {
-  const { loading, error, data } = useQuery(GET_VARIETIES, {
+  const { loading, data } = useQuery(GET_VARIETIES, {
     fetchPolicy: 'network-only',
   });
-  const [isLoading, setLoading] = useState(true);
   const [isEditing, setEditing] = useState(false);
   const [editData, setEditData] = useState({});
   const [tableData, setTableData] = useState([]);
@@ -61,13 +60,6 @@ const VarietiesPage = ({ toastManager }) => {
 
   const handleInputChange = e =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
-
-  const getTableData = () => {
-    getVarieties().then(result => {
-      setLoading(false);
-      setTableData(result.data.allVarieties);
-    });
-  };
 
   const handleDeleteVariety = (id, varietyName) => {
     deleteVariety({ id })
@@ -100,8 +92,8 @@ const VarietiesPage = ({ toastManager }) => {
     const variables = {
       id: data.id,
       variety: data.varietyName,
-      flower_time: parseInt(data.flowerTime),
-      grow_time: parseInt(data.growTime),
+      flower_time: toInteger(data.flowerTime),
+      grow_time: toInteger(data.growTime),
       notes: data.varietyNotes,
     };
 
@@ -120,16 +112,14 @@ const VarietiesPage = ({ toastManager }) => {
     });
   };
 
-  const handleCancelEdit = e => {
-    setEditing(false);
-  };
+  const handleCancelEdit = () => setEditing(false);
 
   const handleSubmitForm = event => {
     event.preventDefault();
     const variables = {
       variety: inputs.varietyName,
-      flower_time: parseInt(inputs.flowerTime),
-      grow_time: parseInt(inputs.growTime),
+      flower_time: toInteger(inputs.flowerTime),
+      grow_time: toInteger(inputs.growTime),
       notes: inputs.varietyNotes,
     };
     createVariety(variables)
@@ -163,8 +153,10 @@ const VarietiesPage = ({ toastManager }) => {
   };
 
   useEffect(() => {
-    getTableData();
-  }, [tableData]);
+    if (!loading) {
+      setTableData(data.allVarieties);
+    }
+  }, [loading, data]);
 
   return (
     <div>
@@ -198,11 +190,10 @@ const VarietiesPage = ({ toastManager }) => {
       )}
       <VarietiesTable
         data={tableData}
-        isLoading={isLoading}
+        loading={loading}
         handleDeleteVariety={handleDeleteVariety}
         handleOpenEdit={handleOpenEdit}
       />
-      {/* <Button onClick={() => handleQuery()}>Query</Button> */}
     </div>
   );
 };

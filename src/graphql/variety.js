@@ -30,23 +30,6 @@ export const createVariety = variables => {
   });
 };
 
-export const getVarieties = () => {
-  return apolloClient.query({
-    query: gql`
-      {
-        allVarieties {
-          id
-          grow_time
-          flower_time
-          variety
-          notes
-        }
-      }
-    `,
-    fetchPolicy: 'network-only',
-  });
-};
-
 export const deleteVariety = variables => {
   return apolloClient.mutate({
     mutation: gql`
