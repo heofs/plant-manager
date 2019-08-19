@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { withToastManager } from 'react-toast-notifications';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import useLocalStorage from '../../enhancers/useLocalStorage';
+
 import {
   createVariety,
   getVarieties,
@@ -15,69 +19,69 @@ import {
   CardSubtitle,
 } from 'reactstrap';
 
-import VarietiesTable from '../../components/VarietiesTable';
+import VarietiesTable from './VarietiesTable';
 import EditForm from './Form/EditForm';
 import BaseForm from './Form/BaseForm';
 
-class VarietiesPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      isEditing: false,
-      editData: {},
-      tableData: [],
-      varietyName: this.getLocalStorageItem('varietyName'),
-      flowerTime: this.getLocalStorageItem('flowerTime'),
-      growTime: this.getLocalStorageItem('growTime'),
-      varietyNotes: this.getLocalStorageItem('varietyNotes'),
-    };
+const GET_VARIETIES = gql`
+  {
+    allVarieties {
+      id
+      grow_time
+      flower_time
+      variety
+      notes
+    }
   }
-  getLocalStorageItem(item) {
-    return localStorage.getItem('varietyForm-' + item) || '';
-  }
-  clearForm() {
-    localStorage.removeItem('varietyForm-varietyName');
-    localStorage.removeItem('varietyForm-flowerTime');
-    localStorage.removeItem('varietyForm-growTime');
-    localStorage.removeItem('varietyForm-varietyNotes');
-    this.setState({
+`;
+
+const VarietiesPage = ({ toastManager }) => {
+  const { loading, error, data } = useQuery(GET_VARIETIES, {
+    fetchPolicy: 'network-only',
+  });
+  const [isLoading, setLoading] = useState(true);
+  const [isEditing, setEditing] = useState(false);
+  const [editData, setEditData] = useState({});
+  const [tableData, setTableData] = useState([]);
+  const [inputs, setInputs] = useLocalStorage('varietyInputs', {
+    varietyName: '',
+    flowerTime: '',
+    growTime: '',
+    varietyNotes: '',
+  });
+
+  const clearForm = () => {
+    setInputs({
       varietyName: '',
       flowerTime: '',
       growTime: '',
       varietyNotes: '',
     });
-  }
-
-  handleInputChange = e => {
-    localStorage.setItem('varietyForm-' + e.target.name, e.target.value);
-    this.setState({ [e.target.name]: e.target.value });
   };
 
-  getTableData = () => {
+  const handleInputChange = e =>
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+
+  const getTableData = () => {
     getVarieties().then(result => {
-      this.setState({
-        isLoading: false,
-        tableData: result.data.allVarieties,
-      });
+      setLoading(false);
+      setTableData(result.data.allVarieties);
     });
   };
 
-  handleDeleteVariety = (id, varietyName) => {
+  const handleDeleteVariety = (id, varietyName) => {
     deleteVariety({ id })
       .then(() => {
-        const newTableData = this.state.tableData.filter(row => row.id !== id);
-        this.setState({
-          tableData: newTableData,
-        });
-        this.props.toastManager.add('Deleted variety ' + varietyName + '.', {
+        const newTableData = tableData.filter(row => row.id !== id);
+        setTableData(newTableData);
+        toastManager.add('Deleted variety ' + varietyName + '.', {
           appearance: 'success',
           autoDismiss: true,
           pauseOnHover: false,
         });
       })
       .catch(e => {
-        this.props.toastManager.add(e.message, {
+        toastManager.add(e.message, {
           appearance: 'error',
           autoDismiss: true,
           pauseOnHover: false,
@@ -85,15 +89,13 @@ class VarietiesPage extends React.Component {
       });
   };
 
-  handleOpenEdit = rowId => {
-    const selectedRow = this.state.tableData.find(row => row.id === rowId);
-    this.setState({
-      isEditing: true,
-      editData: selectedRow,
-    });
+  const handleOpenEdit = rowId => {
+    const selectedRow = tableData.find(row => row.id === rowId);
+    setEditing(true);
+    setEditData(selectedRow);
   };
 
-  handleSaveEdit = (event, data) => {
+  const handleSaveEdit = (event, data) => {
     event.preventDefault();
     const variables = {
       id: data.id,
@@ -104,62 +106,54 @@ class VarietiesPage extends React.Component {
     };
 
     updateVariety(variables).then(() => {
-      const newTableData = this.state.tableData.map(row =>
+      const newTableData = tableData.map(row =>
         variables.id === row.id ? variables : row
       );
 
-      this.props.toastManager.add('Updated variety.', {
+      toastManager.add('Updated variety.', {
         appearance: 'success',
         autoDismiss: true,
         pauseOnHover: false,
       });
-
-      this.setState({
-        isEditing: false,
-        tableData: newTableData,
-      });
+      setEditing(false);
+      setTableData(newTableData);
     });
   };
 
-  handleCancelEdit = e => {
-    this.setState({
-      isEditing: false,
-    });
+  const handleCancelEdit = e => {
+    setEditing(false);
   };
 
-  handleSubmitForm = event => {
+  const handleSubmitForm = event => {
     event.preventDefault();
     const variables = {
-      variety: this.state.varietyName,
-      flower_time: parseInt(this.state.flowerTime),
-      grow_time: parseInt(this.state.growTime),
-      notes: this.state.varietyNotes,
+      variety: inputs.varietyName,
+      flower_time: parseInt(inputs.flowerTime),
+      grow_time: parseInt(inputs.growTime),
+      notes: inputs.varietyNotes,
     };
     createVariety(variables)
       .then(data => {
-        this.setState(
-          {
-            tableData: [data.data.createVariety, ...this.state.tableData],
-          },
-          this.props.toastManager.add('Created new variety.', {
-            appearance: 'success',
-            autoDismiss: true,
-            pauseOnHover: false,
-          })
-        );
-        this.clearForm();
+        setTableData([...tableData, data.data.createVariety]);
+
+        toastManager.add('Created new variety.', {
+          appearance: 'success',
+          autoDismiss: true,
+          pauseOnHover: false,
+        });
+        clearForm();
       })
       .catch(e => {
         if (
           e.message.includes('duplicate key value violates unique constraint')
         ) {
-          this.props.toastManager.add('This variety name already exist.', {
+          toastManager.add('This variety name already exist.', {
             appearance: 'error',
             autoDismiss: true,
             pauseOnHover: false,
           });
         } else {
-          this.props.toastManager.add(e.message, {
+          toastManager.add(e.message, {
             appearance: 'error',
             autoDismiss: true,
             pauseOnHover: true,
@@ -168,51 +162,49 @@ class VarietiesPage extends React.Component {
       });
   };
 
-  componentDidMount() {
-    this.getTableData();
-  }
+  useEffect(() => {
+    getTableData();
+  }, [tableData]);
 
-  render() {
-    return (
-      <div>
-        {this.state.isEditing ? (
-          <EditForm
-            targetData={this.state.editData}
-            handleSaveEdit={this.handleSaveEdit}
-            handleCancelEdit={this.handleCancelEdit}
-          />
-        ) : (
-          <Card>
-            <CardBody>
-              <CardTitle>
-                <h1>New Variety</h1>
-              </CardTitle>
-              <CardSubtitle>Add your new varieties here.</CardSubtitle>
-              <Form className="mt-2" onSubmit={this.handleSubmitForm}>
-                <BaseForm
-                  handleInputChange={this.handleInputChange}
-                  varietyName={this.state.varietyName}
-                  flowerTime={this.state.flowerTime}
-                  growTime={this.state.growTime}
-                  varietyNotes={this.state.varietyNotes}
-                />
-                <Button color="primary" className="w-100">
-                  Submit
-                </Button>
-              </Form>
-            </CardBody>
-          </Card>
-        )}
-        <VarietiesTable
-          data={this.state.tableData}
-          isLoading={this.state.isLoading}
-          handleDeleteVariety={this.handleDeleteVariety}
-          handleOpenEdit={this.handleOpenEdit}
+  return (
+    <div>
+      {isEditing ? (
+        <EditForm
+          targetData={editData}
+          handleSaveEdit={handleSaveEdit}
+          handleCancelEdit={handleCancelEdit}
         />
-        {/* <Button onClick={() => handleQuery()}>Query</Button> */}
-      </div>
-    );
-  }
-}
+      ) : (
+        <Card>
+          <CardBody>
+            <CardTitle>
+              <h1>New Variety</h1>
+            </CardTitle>
+            <CardSubtitle>Add your new varieties here.</CardSubtitle>
+            <Form className="mt-2" onSubmit={handleSubmitForm}>
+              <BaseForm
+                handleInputChange={handleInputChange}
+                varietyName={inputs.varietyName}
+                flowerTime={inputs.flowerTime}
+                growTime={inputs.growTime}
+                varietyNotes={inputs.varietyNotes}
+              />
+              <Button color="primary" className="w-100">
+                Submit
+              </Button>
+            </Form>
+          </CardBody>
+        </Card>
+      )}
+      <VarietiesTable
+        data={tableData}
+        isLoading={isLoading}
+        handleDeleteVariety={handleDeleteVariety}
+        handleOpenEdit={handleOpenEdit}
+      />
+      {/* <Button onClick={() => handleQuery()}>Query</Button> */}
+    </div>
+  );
+};
 
 export default withToastManager(VarietiesPage);
