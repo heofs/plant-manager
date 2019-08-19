@@ -16,7 +16,7 @@ const RegistrationForm = ({
     <div>
       <p>Create new account</p>
       <Form>
-        {displayMessage && <p style={{ color: 'red' }}>Some message</p>}
+        {displayMessage && <p className="text-danger">{displayMessage}</p>}
         <FormGroup>
           <Input
             type="displayName"
@@ -59,12 +59,23 @@ const RegistrationForm = ({
           color="success"
           onClick={e => {
             e.preventDefault();
+            setDisplayMessage(false);
+            if (!inputs.email || !inputs.password) {
+              setDisplayMessage('You must set an email and password.');
+              return;
+            }
             register(inputs.displayName, inputs.email, inputs.password)
               .then(e => {
                 console.log('Success: ', e);
               })
               .catch(e => {
-                console.log(e);
+                if (e.code.includes('email-already-in-use')) {
+                  setDisplayMessage('Email is already in use.');
+                } else if (e.code.includes('weak-password')) {
+                  setDisplayMessage('Password too weak.');
+                } else if (e.code.includes('invalid-email')) {
+                  setDisplayMessage('Invalid email address.');
+                }
               });
           }}
         >
