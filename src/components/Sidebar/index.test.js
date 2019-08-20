@@ -1,11 +1,15 @@
 import React from 'react';
 import { render } from '../../tests/utils/rtl';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faBraille } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBraille,
+  faSeedling,
+  faDna,
+} from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './';
 import SidebarLink from './SidebarLink';
 
-library.add(faBraille);
+library.add(faBraille, faSeedling, faDna);
 
 describe('Sidebar', () => {
   it('renders without crashing', () => {
