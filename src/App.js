@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import { ToastProvider } from 'react-toast-notifications';
-import { withAuthentication } from './utils/authentication';
+import { withCurrentUser } from './utils/authentication';
 import { apolloClient } from './utils/apollo';
 
 import Layout from './components/Layout';
@@ -52,4 +52,4 @@ function App({ currentUser }) {
   );
 }
 
-export default withAuthentication(App);
+export default withCurrentUser(App);
