@@ -95,6 +95,12 @@ const LoginPage = ({
     <Wrapper>
       <StyledCard className="card text-center mx-auto">
         <h1 className="h3 mb-3 font-weight-normal">Plantager</h1>
+        <h1 className="h3 mb-3 font-weight-normal">
+          API URL = "{process.env.REACT_APP_API_URL}"
+        </h1>
+        <h1 className="h3 mb-3 font-weight-normal">
+          NODE_ENV = {process.env.NODE_ENV}
+        </h1>
         {renderSelection()}
       </StyledCard>
     </Wrapper>
