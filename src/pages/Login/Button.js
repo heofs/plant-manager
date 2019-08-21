@@ -3,11 +3,10 @@ import { Button as BootstrapButton } from 'reactstrap';
 import styled from 'styled-components';
 
 const StyledButton = styled(BootstrapButton)`
-  background-color: red;
   display: flex;
+  justify-content: center;
 `;
 const StyledImage = styled.img`
-  align-self: left;
   height: 100%;
   margin: 0;
   padding-right: 1em;

@@ -5,6 +5,9 @@ import { AuthProvider } from './utils/authentication';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import 'sweetalert2/src/sweetalert2.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 ReactDOM.render(
   <AuthProvider>
     <App />
