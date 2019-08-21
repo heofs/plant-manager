@@ -2,7 +2,9 @@ import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
 import { setContext } from 'apollo-link-context';
 import firebase from './firebase';
 
-const httpLink = new HttpLink({ uri: 'http://localhost:4000/' });
+const uri = process.env.REACT_APP_API_URL || 'http://localhost:4000/';
+console.log(uri);
+const httpLink = new HttpLink({ uri });
 
 const authLink = setContext(async (_, { headers }) => {
   let token = await firebase.isInitialized().then(user => user.ra);
