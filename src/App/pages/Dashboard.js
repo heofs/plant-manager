@@ -1,7 +1,7 @@
 import React from 'react';
 // import styled from 'styled-components';
 // import { Container, Col, Row } from 'reactstrap';
-import { withAuthentication } from '../utils/authentication';
+import { withAuthentication } from 'utils/authentication';
 
 const DashboardPage = ({ currentUser, logout, googleLogin }) => (
   <>

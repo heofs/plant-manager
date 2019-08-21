@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { withAuthentication } from '../../utils/authentication';
-import LoadingPage from '../../components/LoadingPage';
+import { withAuthentication } from 'utils/authentication';
+import LoadingPage from 'components/LoadingPage';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
 import ForgotForm from './ForgotForm';

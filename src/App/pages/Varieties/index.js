@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { withToastManager } from 'react-toast-notifications';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import useLocalStorage from '../../enhancers/useLocalStorage';
+import useLocalStorage from 'enhancers/useLocalStorage';
 import { toInteger } from 'lodash';
 
 import {
   createVariety,
   deleteVariety,
   updateVariety,
-} from '../../graphql/variety';
+} from '../../../graphql/variety';
 import {
   Button,
   Form,

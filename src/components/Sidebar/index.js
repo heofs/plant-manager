@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import SidebarLink from './SidebarLink';
 
-import { sizes, breakpoints } from '../../constants/theme';
-import greenhouseLogo from '../../images/greenhouse.svg';
+import { sizes, breakpoints } from 'constants/theme';
+import greenhouseLogo from 'images/greenhouse.svg';
 
 const StyledSidebar = styled.div`
   height: 100%;

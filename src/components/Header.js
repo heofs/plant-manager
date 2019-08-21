@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Navbar } from 'reactstrap';
-import { breakpoints } from '../constants/theme';
+import { breakpoints } from 'constants/theme';
 
 const StyledNavbar = styled(Navbar)`
   &&& {

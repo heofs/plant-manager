@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { apolloClient } from '../utils/apollo';
+import { apolloClient } from 'utils/apollo';
 
 export const createVariety = variables => {
   return apolloClient.mutate({

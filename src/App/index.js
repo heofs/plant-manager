@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { ToastProvider } from 'react-toast-notifications';
-import { withCurrentUser } from './utils/authentication';
-import { apolloClient } from './utils/apollo';
+import { withCurrentUser } from 'utils/authentication';
+import { apolloClient } from 'utils/apollo';
 
-import Layout from './components/Layout';
+import Layout from 'components/Layout';
 import Dashboard from './pages/Dashboard';
 import Plants from './pages/Plants';
 import Varieties from './pages/Varieties';
@@ -25,11 +25,7 @@ library.add(faHeart, faLeaf, faSeedling, faBraille, faPray, faDna);
 
 function App({ currentUser }) {
   return (
-    <ToastProvider
-      autoDismissTimeout={4000}
-      // components={{ Toast: MyCustomToast }}
-      placement="bottom-right"
-    >
+    <ToastProvider autoDismissTimeout={4000} placement="bottom-right">
       {currentUser ? (
         <ApolloProvider client={apolloClient}>
           <Router>

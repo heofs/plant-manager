@@ -1,6 +1,6 @@
 import React from 'react';
 import PageNotFound from './PageNotFound';
-import { render } from '../tests/utils/rtl';
+import { render } from 'tests/utils/rtl';
 
 test('should show a 404 message', () => {
   const { getByText } = render(<PageNotFound />, {

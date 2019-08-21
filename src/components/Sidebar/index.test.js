@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '../../tests/utils/rtl';
+import { render } from 'tests/utils/rtl';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faBraille,

@@ -1,5 +1,4 @@
 import React from 'react';
-import { withApollo } from 'react-apollo';
 import { withToastManager } from 'react-toast-notifications';
 import { flow } from 'lodash';
 
@@ -58,7 +57,4 @@ class PlantsPage extends React.Component {
   }
 }
 
-export default flow(
-  withApollo,
-  withToastManager
-)(PlantsPage);
+export default flow(withToastManager)(PlantsPage);

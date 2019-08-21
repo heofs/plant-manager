@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import { AuthContext } from './utils/authentication';
+import App from '.';
+import { AuthContext } from 'utils/authentication';
 import { act } from 'react-dom/test-utils';
 
 describe('App', () => {

@@ -3,7 +3,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import StyledButton from './Button';
 import LinkButton from './LinkButton';
 
-import GoogleLogo from '../../images/google-logo.svg';
+import GoogleLogo from 'images/google-logo.svg';
 
 const LoginForm = ({
   inputs,

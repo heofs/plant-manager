@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
-import { breakpoints, sizes } from '../constants/theme';
+import { breakpoints, sizes } from 'constants/theme';
 import 'react-table/react-table.css';
 
 const StyledMain = styled.div`
