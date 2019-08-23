@@ -2,6 +2,7 @@ import React from 'react';
 import { Nav } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import UserInfo from './UserInfo';
 
 import SidebarLink from './SidebarLink';
 
@@ -9,6 +10,8 @@ import { sizes, breakpoints } from 'constants/theme';
 import greenhouseLogo from 'images/greenhouse.svg';
 
 const StyledSidebar = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100%;
   position: fixed;
   z-index: 1;
@@ -78,6 +81,7 @@ const Sidebar = ({ isOpen }) => {
           Login
         </SidebarLink>
       </StyledNav>
+      <UserInfo />
     </StyledSidebar>
   );
 };
