@@ -8,12 +8,21 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './';
 import SidebarLink from './SidebarLink';
+import { AuthContext } from 'utils/authentication';
 
 library.add(faBraille, faSeedling, faDna);
 
 describe('Sidebar', () => {
   it('renders without crashing', () => {
-    const { container } = render(<Sidebar />);
+    const { container } = render(
+      <AuthContext.Provider
+        value={{
+          signout: jest.fn(),
+        }}
+      >
+        <Sidebar />
+      </AuthContext.Provider>
+    );
 
     expect(container.innerHTML).toBeTruthy();
   });

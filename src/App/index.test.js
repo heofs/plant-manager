@@ -18,7 +18,7 @@ describe('App', () => {
   it('renders without crashing', () => {
     const container = document.createElement('div');
     customRender(container, {
-      currentUser: jest.fn(),
+      user: jest.fn(),
     });
 
     ReactDOM.unmountComponentAtNode(container);
@@ -29,7 +29,7 @@ describe('App', () => {
       ReactDOM.render(
         <AuthContext.Provider
           value={{
-            currentUser: {},
+            user: {},
           }}
         >
           <App />
