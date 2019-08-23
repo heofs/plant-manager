@@ -40,7 +40,7 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    if (!user && isLoading) {
+    if (user !== null && isLoading) {
       setLoading(false);
     }
   }, [user, isLoading]);
