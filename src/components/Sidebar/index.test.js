@@ -17,6 +17,7 @@ describe('Sidebar', () => {
     const { container } = render(
       <AuthContext.Provider
         value={{
+          user: { displayName: 'Peter' },
           signout: jest.fn(),
         }}
       >
@@ -28,7 +29,7 @@ describe('Sidebar', () => {
   });
 
   describe('SidebarLink', () => {
-    it('renders without crashing', () => {
+    it('renders link button text correctly', () => {
       const { getByText } = render(
         <SidebarLink to={'/'} icon={'braille'}>
           My sidebar button
