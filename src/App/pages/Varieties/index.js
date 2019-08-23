@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withToastManager } from 'react-toast-notifications';
+import { useToasts } from 'react-toast-notifications';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import useLocalStorage from 'enhancers/useLocalStorage';
@@ -35,10 +35,11 @@ const GET_VARIETIES = gql`
   }
 `;
 
-const VarietiesPage = ({ toastManager }) => {
+const VarietiesPage = () => {
   const { loading, data } = useQuery(GET_VARIETIES, {
     fetchPolicy: 'network-only',
   });
+  const { addToast } = useToasts();
   const [isEditing, setEditing] = useState(false);
   const [editData, setEditData] = useState({});
   const [tableData, setTableData] = useState([]);
@@ -66,14 +67,14 @@ const VarietiesPage = ({ toastManager }) => {
       .then(() => {
         const newTableData = tableData.filter(row => row.id !== id);
         setTableData(newTableData);
-        toastManager.add('Deleted variety ' + varietyName + '.', {
+        addToast('Deleted variety ' + varietyName + '.', {
           appearance: 'success',
           autoDismiss: true,
           pauseOnHover: false,
         });
       })
       .catch(e => {
-        toastManager.add(e.message, {
+        addToast(e.message, {
           appearance: 'error',
           autoDismiss: true,
           pauseOnHover: false,
@@ -102,7 +103,7 @@ const VarietiesPage = ({ toastManager }) => {
         variables.id === row.id ? variables : row
       );
 
-      toastManager.add('Updated variety.', {
+      addToast('Updated variety.', {
         appearance: 'success',
         autoDismiss: true,
         pauseOnHover: false,
@@ -126,7 +127,7 @@ const VarietiesPage = ({ toastManager }) => {
       .then(data => {
         setTableData([...tableData, data.data.createVariety]);
 
-        toastManager.add('Created new variety.', {
+        addToast('Created new variety.', {
           appearance: 'success',
           autoDismiss: true,
           pauseOnHover: false,
@@ -137,13 +138,13 @@ const VarietiesPage = ({ toastManager }) => {
         if (
           e.message.includes('duplicate key value violates unique constraint')
         ) {
-          toastManager.add('This variety name already exist.', {
+          addToast('This variety name already exist.', {
             appearance: 'error',
             autoDismiss: true,
             pauseOnHover: false,
           });
         } else {
-          toastManager.add(e.message, {
+          addToast(e.message, {
             appearance: 'error',
             autoDismiss: true,
             pauseOnHover: true,
@@ -198,4 +199,4 @@ const VarietiesPage = ({ toastManager }) => {
   );
 };
 
-export default withToastManager(VarietiesPage);
+export default VarietiesPage;
