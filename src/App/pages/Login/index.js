@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { withAuthentication } from 'utils/authentication';
 import LoadingPage from 'components/LoadingPage';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
 import ForgotForm from './ForgotForm';
 import styled from 'styled-components';
+import { useAuth } from 'enhancers/useAuth';
 
 const Wrapper = styled.div`
   background-color: #f5f5f5;
@@ -22,14 +22,7 @@ const StyledCard = styled.div`
   padding: 1em;
 `;
 
-const LoginPage = ({
-  currentUser,
-  login,
-  rememberLogin,
-  googleLogin,
-  getUser,
-  register,
-}) => {
+const LoginPage = () => {
   const [isLoading, setLoading] = useState(true);
   const [inputs, setInputs] = useState({
     displayName: '',
@@ -37,6 +30,7 @@ const LoginPage = ({
     password: '',
   });
   const [selection, setSelection] = useState('login');
+  const { user, signin, signup, signinPersist, signinGoogle } = useAuth();
   const handleInputChange = event => {
     event.persist();
     setInputs(inputs => ({
@@ -46,15 +40,12 @@ const LoginPage = ({
   };
 
   useEffect(() => {
-    getUser()
-      .then(user => {
-        isLoading && setLoading(false);
-      })
-      .catch(e => {
-        isLoading && setLoading(false);
-      });
-  }, [isLoading, getUser]);
-  if (currentUser) {
+    if (!user && isLoading) {
+      setLoading(false);
+    }
+  }, [user, isLoading]);
+
+  if (user) {
     return <Redirect to={'/'} />;
   }
   if (isLoading) {
@@ -67,7 +58,7 @@ const LoginPage = ({
           inputs={inputs}
           setSelection={setSelection}
           handleInputChange={handleInputChange}
-          register={register}
+          signup={signup}
         />
       );
     }
@@ -85,9 +76,9 @@ const LoginPage = ({
         inputs={inputs}
         setSelection={setSelection}
         handleInputChange={handleInputChange}
-        login={login}
-        loginPersist={rememberLogin}
-        loginGoogle={googleLogin}
+        signin={signin}
+        signinPersist={signinPersist}
+        signinGoogle={signinGoogle}
       />
     );
   };
@@ -101,4 +92,4 @@ const LoginPage = ({
   );
 };
 
-export default withAuthentication(LoginPage);
+export default LoginPage;

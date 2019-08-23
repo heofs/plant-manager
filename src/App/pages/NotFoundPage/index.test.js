@@ -1,9 +1,9 @@
 import React from 'react';
-import PageNotFound from './PageNotFound';
+import NotFoundPage from './NotFoundPage';
 import { render } from 'tests/utils/rtl';
 
 test('should show a 404 message', () => {
-  const { getByText } = render(<PageNotFound />, {
+  const { getByText } = render(<NotFoundPage />, {
     route: '/something-that-does-not-match',
   });
   const element = getByText('404 - The page was not found.');
@@ -11,7 +11,7 @@ test('should show a 404 message', () => {
 });
 
 test('should always redirect to /404', () => {
-  const { history } = render(<PageNotFound />, {
+  const { history } = render(<NotFoundPage />, {
     route: '/something-that-does-not-match',
   });
 

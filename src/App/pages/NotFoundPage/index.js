@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
-const PageNotFound = ({ history }) => {
+const NotFoundPage = ({ history }) => {
+  if (history && history.location.pathname === '/login') {
+    return <Redirect to={'/'} />;
+  }
   if (history && history.location.pathname !== '/404') {
     history.push('/404');
   }
@@ -16,4 +20,4 @@ const PageNotFound = ({ history }) => {
   );
 };
 
-export default withRouter(PageNotFound);
+export default withRouter(NotFoundPage);

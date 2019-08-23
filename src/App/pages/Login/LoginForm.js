@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
+
 import StyledButton from './Button';
 import LinkButton from './LinkButton';
 
@@ -9,11 +10,11 @@ const LoginForm = ({
   inputs,
   handleInputChange,
   setSelection,
-  loginPersist,
-  login,
-  loginGoogle,
+  signinPersist,
+  signin,
+  signinGoogle,
 }) => {
-  const [rememberLogin, setRememberLogin] = useState(false);
+  const [rememberSignin, setRememberSignin] = useState(false);
   const [isPasswordValid, setPasswordValid] = useState(true);
   const [isEmailValid, setEmailValid] = useState(true);
   const [displayMessage, setDisplayMessage] = useState(false);
@@ -22,7 +23,7 @@ const LoginForm = ({
       <StyledButton
         onClick={e => {
           e.preventDefault();
-          loginGoogle();
+          signinGoogle();
         }}
         image={GoogleLogo}
       >
@@ -63,8 +64,8 @@ const LoginForm = ({
             type="checkbox"
             className="custom-control-input"
             id="remember-id"
-            checked={rememberLogin}
-            onChange={() => setRememberLogin(!rememberLogin)}
+            checked={rememberSignin}
+            onChange={() => setRememberSignin(!rememberSignin)}
           />
           <Label className="custom-control-label" htmlFor="remember-id">
             Remember login
@@ -75,23 +76,24 @@ const LoginForm = ({
           onClick={async e => {
             e.preventDefault();
             setDisplayMessage(false);
-            console.log(inputs);
-            if (rememberLogin === true) {
-              loginPersist(inputs.email, inputs.password);
+            if (rememberSignin === true) {
+              signinPersist(inputs.email, inputs.password);
             }
-            const res = await login(inputs.email, inputs.password);
-            console.log(res);
-            if (res.includes('invalid-email')) {
-              setEmailValid(false);
-            }
-            if (res.includes('invalid-email')) {
-              setPasswordValid(false);
-            }
-            if (res.includes('user-not-found')) {
-              setEmailValid(false);
-              setPasswordValid(false);
-              setDisplayMessage(true);
-            }
+            signin(inputs.email, inputs.password).catch(({ code }) => {
+              if (
+                code.includes('invalid-email') ||
+                code.includes('wrong-password')
+              ) {
+                setEmailValid(false);
+                setPasswordValid(false);
+                setDisplayMessage('Wrong username or password');
+              }
+              if (code.includes('user-not-found')) {
+                setEmailValid(false);
+                setPasswordValid(false);
+                setDisplayMessage('User not found');
+              }
+            });
           }}
         >
           Sign in

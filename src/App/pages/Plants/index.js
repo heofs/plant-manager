@@ -20,9 +20,6 @@ class PlantsPage extends React.Component {
     event.preventDefault();
   };
 
-  // componentDidMount() {
-  // }
-
   render() {
     return (
       <div>

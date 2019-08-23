@@ -1,131 +1,95 @@
 import React, { createContext, useState, useEffect } from 'react';
-import firebase from './firebase';
+import firebase, { googleProvider } from './firebase';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  // const [isLoading, setLoading] = useState(true);
-  const setUser = user => {
-    console.log(user);
-    console.log(user.uid);
-    setCurrentUser({
-      uid: user.uid,
-      displayName: user.displayName,
-      token: user.ra,
-      refreshToken: user.refreshToken,
+  const auth = useFirebaseAuth();
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+};
+
+function useFirebaseAuth() {
+  const [user, setUser] = useState(null);
+  const auth = firebase.auth();
+
+  const signin = (email, password) => {
+    return auth.signInWithEmailAndPassword(email, password).then(response => {
+      setUser(response.user);
+      return response.user;
     });
   };
-  const login = async (email, password) => {
-    return firebase
-      .login(email, password)
+
+  const signup = (email, password) => {
+    return auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(response => {
+        setUser(response.user);
+        return response.user;
+      });
+  };
+
+  const signinPersist = async (email, password) => {
+    const signin = await auth
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        return signin(email, password);
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
+    return signin;
+  };
+
+  const signout = () => {
+    return auth.signOut().then(() => {
+      setUser(false);
+      window.location.href = '/login';
+    });
+  };
+
+  const signinGoogle = () => {
+    auth
+      .signInWithPopup(googleProvider)
       .then(res => {
-        const user = res.user;
-        setUser(user);
-        console.log(res);
-        // setUser({ ...res.user });
-      })
-      .catch(e => e.code);
-  };
-  const rememberLogin = (email, password) => {
-    firebase
-      .rememberLogin()
-      .then(() => {
-        console.log('Persisted login');
-        login(email, password);
+        // console.log(result.credential.accessToken);
+        setUser(res.user);
       })
       .catch(error => {
         console.log(error.message);
       });
   };
-  const logout = async () => {
-    await firebase
-      .logout()
-      .then(() => {
-        console.log('Sign out successfull.');
-        setCurrentUser(null);
-        window.location.href = '/login';
-      })
-      .catch(error => {
-        console.log(error.message);
-      });
+  const sendPasswordResetEmail = email => {
+    return auth.sendPasswordResetEmail(email).then(() => {
+      return true;
+    });
   };
-  const googleLogin = () => {
-    firebase
-      .googleLogin()
-      .then(result => {
-        console.log(result.credential.accessToken);
-        setUser(result.user);
-      })
-      .catch(error => {
-        console.log(error.message);
-      });
+
+  const confirmPasswordReset = (code, password) => {
+    return auth.confirmPasswordReset(code, password).then(() => {
+      return true;
+    });
   };
-  const getUser = () => {
-    return firebase.isInitialized();
-  };
-  const register = (name, email, password) => {
-    return firebase.register(name, email, password);
-  };
+
   useEffect(() => {
-    firebase.isInitialized().then(user => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        setCurrentUser(user);
+        setUser(user);
       } else {
-        setCurrentUser(null);
+        setUser(false);
       }
     });
-  }, [currentUser]);
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        currentUser,
-        getUser,
-        login,
-        logout,
-        rememberLogin,
-        googleLogin,
-        register,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const withAuthentication = Component => () => {
-  return (
-    <AuthContext.Consumer>
-      {({
-        currentUser,
-        getUser,
-        login,
-        logout,
-        rememberLogin,
-        googleLogin,
-        register,
-      }) => (
-        <Component
-          currentUser={currentUser}
-          login={login}
-          logout={logout}
-          rememberLogin={rememberLogin}
-          googleLogin={googleLogin}
-          getUser={getUser}
-          register={register}
-        />
-      )}
-    </AuthContext.Consumer>
-  );
-};
-
-export const withCurrentUser = Component => () => {
-  return (
-    <AuthContext.Consumer>
-      {({ currentUser, logout }) => (
-        <Component currentUser={currentUser} logout={logout} />
-      )}
-    </AuthContext.Consumer>
-  );
-};
+  return {
+    user,
+    signin,
+    signup,
+    signinPersist,
+    signout,
+    signinGoogle,
+    sendPasswordResetEmail,
+    confirmPasswordReset,
+  };
+}
