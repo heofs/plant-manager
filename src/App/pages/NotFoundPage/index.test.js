@@ -1,5 +1,5 @@
 import React from 'react';
-import NotFoundPage from './NotFoundPage';
+import NotFoundPage from './';
 import { render } from 'tests/utils/rtl';
 
 test('should show a 404 message', () => {
