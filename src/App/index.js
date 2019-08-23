@@ -2,14 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ToastProvider } from 'react-toast-notifications';
-import { withCurrentUser } from 'utils/authentication';
 import { apolloClient } from 'utils/apollo';
+import useCurrentUser from 'enhancers/useCurrentUser';
 
 import Layout from 'components/Layout';
 import Dashboard from './pages/Dashboard';
 import Plants from './pages/Plants';
 import Varieties from './pages/Varieties';
-import PageNotFound from './pages/PageNotFound';
+import NotFoundPage from './pages/NotFoundPage';
 import LoginPage from './pages/Login';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -23,7 +23,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 library.add(faHeart, faLeaf, faSeedling, faBraille, faPray, faDna);
 
-function App({ currentUser }) {
+function App() {
+  const { currentUser } = useCurrentUser();
+  console.log(currentUser);
   return (
     <ToastProvider autoDismissTimeout={4000} placement="bottom-right">
       {currentUser ? (
@@ -36,7 +38,7 @@ function App({ currentUser }) {
                 <Route path="/plants" component={Plants} />
                 <Route path="/varieties" component={Varieties} />
                 <Route path="/login" component={LoginPage} />
-                <Route path="*" exact={true} component={PageNotFound} />
+                <Route path="*" exact={true} component={NotFoundPage} />
               </Switch>
             </Layout>
           </Router>
@@ -48,4 +50,4 @@ function App({ currentUser }) {
   );
 }
 
-export default withCurrentUser(App);
+export default App;
