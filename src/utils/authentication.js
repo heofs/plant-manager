@@ -29,7 +29,7 @@ function useFirebaseAuth() {
   };
 
   const signinPersist = async (email, password) => {
-    const signin = await auth
+    const newSignin = await auth
       .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => {
         return signin(email, password);
@@ -37,7 +37,7 @@ function useFirebaseAuth() {
       .catch(error => {
         console.log(error.message);
       });
-    return signin;
+    return newSignin;
   };
 
   const signout = () => {
