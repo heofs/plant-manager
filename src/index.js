@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AuthProvider } from 'utils/authentication';
+import ErrorBoundary from './App/ErrorBoundary';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -9,9 +10,11 @@ import 'sweetalert2/src/sweetalert2.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
-  <AuthProvider>
-    <App />
-  </AuthProvider>,
+  <ErrorBoundary>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </ErrorBoundary>,
   document.getElementById('root')
 );
 
