@@ -7,6 +7,7 @@ import PrivateRoute from 'components/PrivateRoute';
 import Dashboard from './pages/Dashboard';
 import Plants from './pages/Plants';
 import Varieties from './pages/Varieties';
+import Settings from './pages/Settings';
 import NotFoundPage from './pages/NotFoundPage';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -30,6 +31,7 @@ const App = () => {
             <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute path="/plants" component={Plants} />
             <PrivateRoute path="/varieties" component={Varieties} />
+            <PrivateRoute path="/settings" component={Settings} />
             <PrivateRoute path="*" exact={true} component={NotFoundPage} />
           </Switch>
         </Router>
