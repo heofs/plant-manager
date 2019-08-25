@@ -9,14 +9,16 @@ jobs:
       matrix:
         node-version: [10.x]
     steps:
-    - uses: actions/checkout@master
-    - name: Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@master
-      with:
-        node-version: 10.x
+      - uses: actions/checkout@master
+      - name: Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@master
+        with:
+          node-version: 10.x
 
-    - run: npm install
-    - run: npm test
-      env:
-        CI: true
-    - run: npm run build --if-present
+      - run: npm ci
+        env:
+          SUPPRESS_SUPPORT: true
+      - run: npm test
+        env:
+          CI: true
+      - run: npm run build --if-present
