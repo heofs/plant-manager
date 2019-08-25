@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from 'enhancers/useAuth';
+import { useToasts } from 'react-toast-notifications';
 import { Card, CardBody, Button, Input, Col } from 'reactstrap';
 import styled from 'styled-components';
 
@@ -22,12 +23,11 @@ const StyledInput = styled(Input)`
 
 const SettingsPage = () => {
   const { user } = useAuth();
+  const { addToast } = useToasts();
   const [name, setName] = useState(user.displayName || '');
   const [firstPW, setFirstPW] = useState('');
   const [secondPW, setSecondPW] = useState('');
   const [validPW, setValidPW] = useState(true);
-  const [passMsg, setPassMsg] = useState('');
-  const [nameMsg, setNameMsg] = useState('');
 
   const changePassword = () => {
     setValidPW(true);
@@ -40,25 +40,36 @@ const SettingsPage = () => {
       .then(() => {
         setFirstPW('');
         setSecondPW('');
-        setPassMsg('- Successfully changed password');
+        addToast('Successfully changed password', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
       })
       .catch(({ code }) => {
         setValidPW(false);
-        setPassMsg(`- Error: ${code}`);
+        addToast('Error: ' + code, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
       });
   };
 
   const changeName = () => {
-    console.log('Changing name');
     user
       .updateProfile({
         displayName: name,
       })
       .then(() => {
-        setNameMsg('- Successfully changed name');
+        addToast('Successfully changed name', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
       })
       .catch(({ code }) => {
-        setNameMsg(`- Error: ${code}`);
+        addToast('Error: ' + code, {
+          appearance: 'error',
+          autoDismiss: false,
+        });
       });
   };
 
@@ -67,7 +78,7 @@ const SettingsPage = () => {
       <Col xs={12} lg={8} xl={6} className="p-0">
         <CardBody>
           <CardTitle>Settings</CardTitle>
-          <SettingTitle>Change Name {nameMsg}</SettingTitle>
+          <SettingTitle>Change Name</SettingTitle>
           <InputRow>
             <StyledInput
               type="text"
@@ -77,7 +88,7 @@ const SettingsPage = () => {
             />
             <Button onClick={changeName}>Change</Button>
           </InputRow>
-          <SettingTitle>Change password {passMsg}</SettingTitle>
+          <SettingTitle>Change password</SettingTitle>
           <InputRow>
             <StyledInput
               type="password"
