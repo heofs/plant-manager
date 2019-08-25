@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import useLocalStorage from 'enhancers/useLocalStorage';
+import { useLocalStorage } from 'enhancers/useLocalStorage';
 import { toInteger } from 'lodash';
 
 import {
@@ -70,14 +70,12 @@ const VarietiesPage = () => {
         addToast('Deleted variety ' + varietyName + '.', {
           appearance: 'success',
           autoDismiss: true,
-          pauseOnHover: false,
         });
       })
       .catch(e => {
         addToast(e.message, {
           appearance: 'error',
           autoDismiss: true,
-          pauseOnHover: false,
         });
       });
   };
@@ -106,7 +104,6 @@ const VarietiesPage = () => {
       addToast('Updated variety.', {
         appearance: 'success',
         autoDismiss: true,
-        pauseOnHover: false,
       });
       setEditing(false);
       setTableData(newTableData);
@@ -130,7 +127,6 @@ const VarietiesPage = () => {
         addToast('Created new variety.', {
           appearance: 'success',
           autoDismiss: true,
-          pauseOnHover: false,
         });
         clearForm();
       })
@@ -141,20 +137,18 @@ const VarietiesPage = () => {
           addToast('This variety name already exist.', {
             appearance: 'error',
             autoDismiss: true,
-            pauseOnHover: false,
           });
         } else {
           addToast(e.message, {
             appearance: 'error',
             autoDismiss: true,
-            pauseOnHover: true,
           });
         }
       });
   };
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && data.allVarieties) {
       setTableData(data.allVarieties);
     }
   }, [loading, data]);
