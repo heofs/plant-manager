@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useToasts } from 'react-toast-notifications';
-import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
+import { useToasts } from 'react-toast-notifications';
 import { useLocalStorage } from 'enhancers/useLocalStorage';
 import { toInteger } from 'lodash';
-
-import {
-  createVariety,
-  deleteVariety,
-  updateVariety,
-} from '../../../graphql/variety';
 import {
   Button,
   Form,
@@ -18,6 +12,12 @@ import {
   CardTitle,
   CardSubtitle,
 } from 'reactstrap';
+
+import {
+  createVariety,
+  deleteVariety,
+  updateVariety,
+} from '../../../graphql/variety';
 
 import VarietiesTable from './VarietiesTable';
 import EditForm from './Form/EditForm';
@@ -110,8 +110,6 @@ const VarietiesPage = () => {
     });
   };
 
-  const handleCancelEdit = () => setEditing(false);
-
   const handleSubmitForm = event => {
     event.preventDefault();
     const variables = {
@@ -123,7 +121,6 @@ const VarietiesPage = () => {
     createVariety(variables)
       .then(data => {
         setTableData([...tableData, data.data.createVariety]);
-
         addToast('Created new variety.', {
           appearance: 'success',
           autoDismiss: true,
@@ -131,9 +128,7 @@ const VarietiesPage = () => {
         clearForm();
       })
       .catch(e => {
-        if (
-          e.message.includes('duplicate key value violates unique constraint')
-        ) {
+        if (e.message.includes('duplicate key value')) {
           addToast('This variety name already exist.', {
             appearance: 'error',
             autoDismiss: true,
@@ -148,7 +143,7 @@ const VarietiesPage = () => {
   };
 
   useEffect(() => {
-    if (!loading && data.allVarieties) {
+    if (!loading && data && data.allVarieties) {
       setTableData(data.allVarieties);
     }
   }, [loading, data]);
@@ -159,7 +154,7 @@ const VarietiesPage = () => {
         <EditForm
           targetData={editData}
           handleSaveEdit={handleSaveEdit}
-          handleCancelEdit={handleCancelEdit}
+          handleCancelEdit={() => setEditing(false)}
         />
       ) : (
         <Card>
