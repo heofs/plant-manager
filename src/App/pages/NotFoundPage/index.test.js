@@ -2,18 +2,23 @@ import React from 'react';
 import NotFoundPage from './';
 import { render } from 'tests/utils/rtl';
 
-test('should show a 404 message', () => {
-  const { getByText } = render(<NotFoundPage />, {
-    route: '/something-that-does-not-match',
-  });
-  const element = getByText('404 - The page was not found.');
-  expect(element).toBeTruthy();
-});
+describe('Not found page', () => {
+  const wrongRoute = '/something-that-does-not-match';
 
-test('should always redirect to /404', () => {
-  const { history } = render(<NotFoundPage />, {
-    route: '/something-that-does-not-match',
+  test('should show a 404 message', () => {
+    const { getByText } = render(<NotFoundPage />, {
+      route: wrongRoute,
+    });
+    const element = getByText('Sorry, the page was not found');
+    expect(element).toBeTruthy();
   });
 
-  expect(history.location.pathname).toBe('/404');
+  test('should display a message with the route', () => {
+    const { getByText } = render(<NotFoundPage />, {
+      route: wrongRoute,
+    });
+
+    const element = getByText(wrongRoute);
+    expect(element).toBeTruthy();
+  });
 });
