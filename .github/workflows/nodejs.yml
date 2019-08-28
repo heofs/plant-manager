@@ -18,7 +18,13 @@ jobs:
       - run: npm ci
         env:
           SUPPRESS_SUPPORT: true
-      - run: npm test
+      - run: |
+          npm test
+          npm test --coverage
         env:
           CI: true
       - run: npm run build --if-present
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
