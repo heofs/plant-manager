@@ -1,0 +1,24 @@
+name: Node CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: 10.x
+      - name: Generate coverage report
+        run: |
+          npm ci
+          npm test --coverage
+        env:
+          CI: true
+          SUPPRESS_SUPPORT: true
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
