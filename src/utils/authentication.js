@@ -19,13 +19,19 @@ function useFirebaseAuth() {
     });
   };
 
-  const signup = (email, password) => {
-    return auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(response => {
-        setUser(response.user);
-        return response.user;
-      });
+  const signup = (email, password, displayName) => {
+    return auth.createUserWithEmailAndPassword(email, password).then(res => {
+      const user = res.user;
+      setUser(user);
+      user
+        .updateProfile({
+          displayName: displayName,
+        })
+        .then(e => {
+          setUser({ ...user, displayName: displayName });
+        });
+      return user;
+    });
   };
 
   const signinPersist = async (email, password) => {

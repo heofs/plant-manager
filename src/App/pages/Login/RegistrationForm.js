@@ -5,9 +5,9 @@ import LinkButton from './LinkButton';
 
 const RegistrationForm = ({
   inputs,
-  handleInputChange,
   setSelection,
-  register,
+  handleInputChange,
+  signup,
 }) => {
   const [isPasswordValid, setPasswordValid] = useState(true);
   const [isEmailValid, setEmailValid] = useState(true);
@@ -64,11 +64,15 @@ const RegistrationForm = ({
               setDisplayMessage('You must set an email and password.');
               return;
             }
-            register(inputs.displayName, inputs.email, inputs.password)
+            signup(inputs.email, inputs.password, inputs.displayName)
               .then(e => {
                 console.log('Success: ', e);
               })
               .catch(e => {
+                console.log('Error: ', e);
+                if (!e.code) {
+                  return;
+                }
                 if (e.code.includes('email-already-in-use')) {
                   setDisplayMessage('Email is already in use.');
                 } else if (e.code.includes('weak-password')) {
