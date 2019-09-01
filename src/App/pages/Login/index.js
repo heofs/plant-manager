@@ -30,7 +30,14 @@ const LoginPage = () => {
     password: '',
   });
   const [selection, setSelection] = useState('login');
-  const { user, signin, signup, signinPersist, signinGoogle } = useAuth();
+  const {
+    user,
+    signin,
+    signup,
+    signinPersist,
+    signinGoogle,
+    sendPasswordResetEmail,
+  } = useAuth();
   const handleInputChange = event => {
     event.persist();
     setInputs(inputs => ({
@@ -68,6 +75,7 @@ const LoginPage = () => {
           inputs={inputs}
           setSelection={setSelection}
           handleInputChange={handleInputChange}
+          sendPasswordResetEmail={sendPasswordResetEmail}
         />
       );
     }
