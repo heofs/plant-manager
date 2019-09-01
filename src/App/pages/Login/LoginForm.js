@@ -40,6 +40,7 @@ const LoginForm = ({
             id="email-id"
             placeholder="Email address"
             invalid={!isEmailValid}
+            value={inputs.email}
             onChange={e => {
               handleInputChange(e);
               setEmailValid(true);
@@ -52,6 +53,7 @@ const LoginForm = ({
             name="password"
             id="password-id"
             placeholder="Password"
+            value={inputs.password}
             invalid={!isPasswordValid}
             onChange={e => {
               handleInputChange(e);
@@ -102,7 +104,7 @@ const LoginForm = ({
       <LinkButton
         onClick={e => {
           e.preventDefault();
-          setSelection('register');
+          setSelection('forgotpw');
           setDisplayMessage(false);
         }}
       >

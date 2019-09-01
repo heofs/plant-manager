@@ -23,6 +23,7 @@ const RegistrationForm = ({
             name="displayName"
             id="displayName-id"
             placeholder="Your name (optional)"
+            value={inputs.displayName}
             onChange={e => {
               handleInputChange(e);
             }}
@@ -34,6 +35,7 @@ const RegistrationForm = ({
             name="email"
             id="email-id"
             placeholder="Email address"
+            value={inputs.email}
             invalid={!isEmailValid}
             onChange={e => {
               handleInputChange(e);
@@ -47,6 +49,7 @@ const RegistrationForm = ({
             name="password"
             id="password-id"
             placeholder="Password"
+            value={inputs.password}
             invalid={!isPasswordValid}
             onChange={e => {
               handleInputChange(e);
