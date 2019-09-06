@@ -13,11 +13,7 @@ import {
   CardSubtitle,
 } from 'reactstrap';
 
-import {
-  createVariety,
-  deleteVariety,
-  updateVariety,
-} from '../../../graphql/variety';
+import { createVariety, deleteVariety, updateVariety } from 'graphql/variety';
 
 import VarietiesTable from './VarietiesTable';
 import EditForm from './Form/EditForm';
