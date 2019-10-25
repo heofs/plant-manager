@@ -1,4 +1,4 @@
-name: Node CI
+name: Node.js workflow
 
 on: [push, pull_request]
 
@@ -14,7 +14,6 @@ jobs:
         uses: actions/setup-node@master
         with:
           node-version: 10.x
-
       - run: npm ci
         env:
           SUPPRESS_SUPPORT: true
