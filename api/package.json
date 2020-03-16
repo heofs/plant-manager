@@ -1,0 +1,45 @@
+{
+  "name": "plant-manager-api",
+  "version": "1.0.0",
+  "description": "API to manage plant varieties.",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "start2": "NODE_ENV=development npm run build && npm start",
+    "develop": "nodemon -r dotenv/config",
+    "deploy": "tsc && gcloud app deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/heofs/plant-manager"
+  },
+  "keywords": [
+    "plants",
+    "api",
+    "typescript",
+    "graphql"
+  ],
+  "author": "Henning Ofstad",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/webpack-env": "^1.15.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^6.8.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.10.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "graphql": "^14.6.0"
+  }
+}
